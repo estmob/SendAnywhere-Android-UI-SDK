@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "576325318014",
+    "firebase_url": "https://send-anywhere-sdk-sample.firebaseio.com",
+    "project_id": "send-anywhere-sdk-sample",
+    "storage_bucket": "send-anywhere-sdk-sample.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576325318014:android:b0c08cc0fbf35e1b",
+        "android_client_info": {
+          "package_name": "com.estmob.paprika.transfer.sample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576325318014-beaj2nv0d0fng9jji2fkrqfa58mc08r5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALmJWlMRRKZTvxYVRtmikNEmvHNGlqODQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576325318014:android:5e201f422ad39db0",
+        "android_client_info": {
+          "package_name": "com.estmob.android.sendanywhere.sdk.ui.example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576325318014-beaj2nv0d0fng9jji2fkrqfa58mc08r5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALmJWlMRRKZTvxYVRtmikNEmvHNGlqODQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
