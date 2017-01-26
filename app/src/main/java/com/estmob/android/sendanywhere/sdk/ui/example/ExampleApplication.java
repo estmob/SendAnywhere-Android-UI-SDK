@@ -1,4 +1,4 @@
-package com.estmob.android.sendanywhere.sdk.ui.example.sample;
+package com.estmob.android.sendanywhere.sdk.ui.example;
 
 import android.app.Application;
 import android.os.Environment;
@@ -12,7 +12,7 @@ import java.io.File;
  * Created by francisco on 2016-12-14.
  */
 
-public class SampleApplication extends Application {
+public class ExampleApplication extends Application {
 
     private static final String API_KEY = "d225967173e9d95550b8f2fca8e659bc5c0fbddc";
 

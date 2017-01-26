@@ -1,4 +1,4 @@
-package com.estmob.android.sendanywhere.sdk.ui.example.sample;
+package com.estmob.android.sendanywhere.sdk.ui.example;
 
 import android.content.Intent;
 import android.os.Bundle;

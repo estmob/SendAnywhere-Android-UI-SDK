@@ -1,4 +1,4 @@
-package com.estmob.android.sendanywhere.sdk.ui.example.sample;
+package com.estmob.android.sendanywhere.sdk.ui.example;
 
 import com.estmob.sdk.transfer.SendAnywhere;
 import com.google.firebase.iid.FirebaseInstanceId;
