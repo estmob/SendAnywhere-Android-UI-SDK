@@ -82,6 +82,7 @@ public class SendAnywhere {
 
 ### public static void init(Context context, String key)
 Initialize the SDK. It must be called before using the SDK.
+
 Parameters |                                      |
 -----------| -------------------------------------|
 context    | The application context.             |
@@ -92,12 +93,14 @@ It should be called when you are finished using the SDK. When this method is cal
 
 ### public static Settings getSettings(Context context)
 Returns an object of the class that sets the SDK options or gets the current options.
+
 Parameters |                                      |
 -----------| -------------------------------------|
 context    | The current context.                 |
 
 ### public static void startSendActivity(Context context, Uri[] uris)
 Start the Send Activity.
+
 Parameters |                                      |
 -----------| -------------------------------------|
 context    | The current context.                 |
@@ -105,12 +108,14 @@ uris       | The array of URIs of the files to transfer.   |
 
 ### public static void startReceiveActivity(Context context)
 Start the Receive Activity.
+
 Parameters |                                      |
 -----------| -------------------------------------|
 context    | The current context.                 |
 
 ### public static void startReceiveActivity(Context context, String key)
 Start the Receive Activity and start downloading immediately with the given key.
+
 Parameters |                                      |
 -----------| -------------------------------------|
 context    | The current context.                 |
@@ -118,6 +123,7 @@ key         | The key to download.                |
 
 ### public static void showActivity(Context context)
 Show the send and receive progress and the result of the transfer operation.
+
 Parameters |                                      |
 -----------| -------------------------------------|
 context    | The current context.                 |
@@ -133,6 +139,7 @@ Get the transfer history. You can get history via the listener passed as a param
 
 ### public static void deleteHistory(String id)
 Delete the history.
+
 Parameters |                           |
 ---------- | --------------------------|
 id         | ID of history to delete   |
@@ -142,6 +149,7 @@ Delete all file transfer history.
 
 ### public static void deleteKey(String key)
 Delete the link used for file sharing. Unable to download file with deleted link.
+
 Parameters |                           |
 ---------- | --------------------------|
 key         | The key used for link    |
@@ -154,6 +162,7 @@ Delete all file transfer notifications delivered to the current device.
 
 ### public static void deleteReceivedNotification(long id)
 Delete the specified file transfer notification.
+
 Parameters |                                        |
 ---------- | --------------------------------------|
 id         | The ID of the notification to delete. |
@@ -163,12 +172,14 @@ Get information about devices that recently exchanged files. Device information 
 
 ### public static void getDevice(String id, DeviceListener listener)
 Get information about the specified device.
+
 Parameters |                            |
 ---------- | ---------------------------|
 id         | The ID of the device.      |
 
 ### public static void deleteDevice(String id)
 Delete information about the specified device.
+
 Parameters |                            |
 ---------- | ---------------------------|
 id         | The ID of the device.      |
@@ -228,12 +239,14 @@ public class SendAnywhere {
 
 ### void setDownloadDir(File dir)
 Set the directory where the files is downloaded. The default is '/ SendAnywhere'.
+
 Parameters |                                                        |
 ---------- | ------------------------------------------------------|
 dir        | The directory where the files will be downloaded      |
 
 ### void setProfileName(String name)
 Set the profile name to be displayed on other devices.
+
 Parameters |                       |
 ---------- | ----------------------|
 dir        | The profile name      |
@@ -241,12 +254,14 @@ dir        | The profile name      |
 ### void setDeviceToken(String token)
 Set the GCM / FCM token to receive file transfer notifications delivered directly to the device. If set to null, no notifications will be dispatched. The default value is null.
 See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/MyFirebaseInstanceIDService.java).
+
 Parameters |                       |
 ---------- | ----------------------|
 token      | GCM/FCM token         |
 
 ### void setTheme(Theme theme)
 Set the theme that will be used for the Activity starting from the SDK. The default value is 'DEFAULT'.
+
 SendAnywhere.Theme   |                       |
 -------------------- | ----------------------|
 DEFAULT              | Default Theme         |
@@ -254,6 +269,7 @@ DARK                  | Dark Theme            |
 
 ### void setTrustedDevicesOption(TrustedDevicesOption option)
 Set the option for trusted devices. Files sent from trusted devices are automatically downloaded. The default value is 'ASK'.
+
 SendAnywhere.TrustedDevicesOption   |                       |
 ----------------------------------- | ----------------------|
 ON                                | Trust all devices         |
@@ -262,6 +278,7 @@ ASK                                | Ask user to trust        |
 
 ### void setRecordTransferHistory(boolean record)
 Set whether to record the send and receive history. The default value is false.
+
 value of record   |                       |
 ----------------- | ----------------------|
 true             | Record history.          |
@@ -269,6 +286,7 @@ false            | Do not record history.  |
 
 ### void setDuplicateFileOption(DuplicateFileOption option)
 Set up the processing method when duplicate files are downloaded. The default value is 'RENAME'.
+
 SendAnywhere.DuplicateFileOption    |                       |
 ----------------------------------- | ----------------------|
 RENAME                           | Rename the file.         |
