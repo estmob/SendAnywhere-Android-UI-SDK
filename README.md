@@ -298,12 +298,12 @@ OVERWRITE                           | Overwrite the file.   |
 public class SendAnywhere {
 ...
     public interface HistoryListener {
-        void onGetHistory(List<SendAnywhere.TransferHistory> var1);
+        void onGetHistory(List<SendAnywhere.TransferHistory> historyList);
     }
 ...
 }
 ```
-### void onGetHistory(List<SendAnywhere.TransferHistory> var1)
+### void onGetHistory(List<SendAnywhere.TransferHistory> historyList)
 Get the transfer history list. See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/HistoryActivity.java).
 
 ## Interface SendAnywhere.TransferHistory
