@@ -254,6 +254,7 @@ dir        | The profile name      |
 ### void setDeviceToken(String token)
 Set the GCM / FCM token to receive file transfer notifications delivered directly to the device. If set to null, no notifications will be dispatched. The default value is null.
 See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/MyFirebaseInstanceIDService.java).
+**In order for your app to receive notifications, you need to register your GCM / FCM server key. Request registration of your server key by email(api@estmob.com).**
 
 Parameters |                       |
 ---------- | ----------------------|
