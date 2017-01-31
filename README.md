@@ -119,7 +119,7 @@ Start the Receive Activity and start downloading immediately with the given key.
 Parameters |                                      |
 -----------| -------------------------------------|
 context    | The current context.                 |
-key         | The key to download.                |
+key        | The key to download.                 |
 
 ### public static void showActivity(Context context)
 Show the send and receive progress and the result of the transfer operation.
@@ -163,7 +163,7 @@ Delete all file transfer notifications delivered to the current device.
 ### public static void deleteReceivedNotification(long id)
 Delete the specified file transfer notification.
 
-Parameters |                                        |
+Parameters |                                       |
 ---------- | --------------------------------------|
 id         | The ID of the notification to delete. |
 
@@ -240,7 +240,7 @@ public class SendAnywhere {
 ### void setDownloadDir(File dir)
 Set the directory where the files is downloaded. The default is '/ SendAnywhere'.
 
-Parameters |                                                        |
+Parameters |                                                       |
 ---------- | ------------------------------------------------------|
 dir        | The directory where the files will be downloaded      |
 
@@ -266,29 +266,111 @@ Set the theme that will be used for the Activity starting from the SDK. The defa
 SendAnywhere.Theme   |                       |
 -------------------- | ----------------------|
 DEFAULT              | Default Theme         |
-DARK                  | Dark Theme            |
+DARK                 | Dark Theme            |
 
 ### void setTrustedDevicesOption(TrustedDevicesOption option)
 Set the option for trusted devices. Files sent from trusted devices are automatically downloaded. The default value is 'ASK'.
 
-SendAnywhere.TrustedDevicesOption   |                       |
------------------------------------ | ----------------------|
-ON                                | Trust all devices         |
-OFF                                | Do not trust all devices  |
-ASK                                | Ask user to trust        |
+SendAnywhere.TrustedDevicesOption   |                          |
+----------------------------------- | -------------------------|
+ON                                  | Trust all devices        |
+OFF                                 | Do not trust all devices |
+ASK                                 | Ask user to trust        |
 
 ### void setRecordTransferHistory(boolean record)
 Set whether to record the send and receive history. The default value is false.
 
-value of record   |                       |
------------------ | ----------------------|
-true             | Record history.          |
-false            | Do not record history.  |
+value of record   |                          |
+----------------- | -------------------------|
+true              | Record history.          |
+false             | Do not record history.   |
 
 ### void setDuplicateFileOption(DuplicateFileOption option)
 Set up the processing method when duplicate files are downloaded. The default value is 'RENAME'.
 
 SendAnywhere.DuplicateFileOption    |                       |
 ----------------------------------- | ----------------------|
-RENAME                           | Rename the file.         |
-OVERWRITE                        | Overwrite the file.      |
+RENAME                              | Rename the file.      |
+OVERWRITE                           | Overwrite the file.   |
+
+## Interface SendAnywhere.HistoryListener
+```java
+public class SendAnywhere {
+...
+    public interface HistoryListener {
+        void onGetHistory(List<SendAnywhere.TransferHistory> var1);
+    }
+...
+}
+```
+### void onGetHistory(List<SendAnywhere.TransferHistory> var1)
+Get the transfer history list. See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/HistoryActivity.java).
+
+## Interface SendAnywhere.TransferHistory
+This interface provides data related to each transfer history.
+You need to call 'Settings.setRecordTransferHistory (true);' 'to get the full history. The history of items shared with 'Share link' can be obtained regardless of the Settings.setRecordTransferHistory () call.
+See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/HistoryActivity.java).
+```java
+public class SendAnywhere {
+...
+    public interface TransferHistory {
+            String getId();
+            String getKey();
+            String getLink();
+            String getPeerDeviceId();
+            SendAnywhere.TransferType getType();
+            long getExpireAt();
+            SendAnywhere.TransferState getState();
+            long getSize();
+            int getFileCount();
+            long getStartTime();
+            long getFinishedTime();
+        }
+...
+}
+```
+
+### String getId()
+Get the history ID. This ID is used as a parameter of SendAnywhere.deleteHistory().
+
+### String getKey()
+Get the transfer key. This key is used as a parameter of SendAnywhere.deleteKey().
+
+### String getLink()
+Get the URL of the item shared with 'Share link'.
+
+### String getPeerDeviceId()
+Get the device ID of the other party. This ID is used as a parameter of SendAnywhere.getDevice().
+
+### SendAnywhere.TransferType getType()
+Get the transfer type.
+
+SendAnywhere.TransferType   |                       |
+--------------------------- | ----------------------|
+SEND                        | Sent                  |
+RECEIVE                     | Received              |
+SHARE                       | Shared via URL link   |
+
+### long getExpireAt()
+Get the time the URL link expires. (millisecond)
+
+### SendAnywhere.TransferState getState()
+Get the result of the transmission.
+
+SendAnywhere.TransferState  |                       |
+--------------------------- | ----------------------|
+SUCCEEDED                   | Succeeded             |
+CANCELLED                   | Cancelled by user     |
+FAILED                      | Failed                |
+
+### long getSize()
+Get all transferred file sizes.
+
+### int getFileCount()
+Get the number of all transferred files.
+
+### long getStartTime()
+Get the time when the transmission started. (millisecond)
+
+### long getFinishedTime()
+Get the time when the transmission finished. (millisecond)
