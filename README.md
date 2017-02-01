@@ -192,7 +192,7 @@ Delete all trusted devices. Trusted devices can be specified by the user and wil
 
 ## Interface SendAnywhere.Settings
 ---
-This class is used to set and get the options of the SDK.
+This interface is used to set and get the options of the SDK.
 First look at the source code of [the provided demo](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/SettingsActivity.java).
 ```java
 package com.estmob.sdk.transfer;
@@ -294,6 +294,7 @@ RENAME                              | Rename the file.      |
 OVERWRITE                           | Overwrite the file.   |
 
 ## Interface SendAnywhere.HistoryListener
+Used as a parameter of SendAnywhere.getHistory().
 ```java
 public class SendAnywhere {
 ...
@@ -304,7 +305,7 @@ public class SendAnywhere {
 }
 ```
 ### void onGetHistory(List<SendAnywhere.TransferHistory> historyList)
-Get the transfer history list. See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/HistoryActivity.java).
+Called when a transfer history list is obtained. See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/HistoryActivity.java).
 
 ## Interface SendAnywhere.TransferHistory
 This interface provides data related to each transfer history.
@@ -314,18 +315,18 @@ See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/ma
 public class SendAnywhere {
 ...
     public interface TransferHistory {
-            String getId();
-            String getKey();
-            String getLink();
-            String getPeerDeviceId();
-            SendAnywhere.TransferType getType();
-            long getExpireAt();
-            SendAnywhere.TransferState getState();
-            long getSize();
-            int getFileCount();
-            long getStartTime();
-            long getFinishedTime();
-        }
+        String getId();
+        String getKey();
+        String getLink();
+        String getPeerDeviceId();
+        SendAnywhere.TransferType getType();
+        long getExpireAt();
+        SendAnywhere.TransferState getState();
+        long getSize();
+        int getFileCount();
+        long getStartTime();
+        long getFinishedTime();
+    }
 ...
 }
 ```
@@ -370,7 +371,126 @@ Get all transferred file sizes.
 Get the number of all transferred files.
 
 ### long getStartTime()
-Get the time when the transmission started. (millisecond)
+Get the time when the transmission started. (milliseconds)
 
 ### long getFinishedTime()
-Get the time when the transmission finished. (millisecond)
+Get the time when the transmission finished. (milliseconds)
+
+## Interface SendAnywhere.DeviceListListener
+Used as a parameter of SendAnywhere.getDeviceList().
+See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/DeviceListActivity.java).
+```java
+public class SendAnywhere {
+...
+    public interface DeviceListListener {
+        void onGetDeviceList(List<SendAnywhere.DeviceInfo> deviceList);
+    }
+...
+}
+```
+### void onGetDeviceList(List<SendAnywhere.DeviceInfo> deviceList)
+Called when getting a list of devices that have recently sent or received files.
+
+## Interface SendAnywhere.DeviceListListener
+Used as a parameter of SendAnywhere.getDevice().
+See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/HistoryActivity.java).
+```java
+public class SendAnywhere {
+...
+    public interface DeviceListener {
+        void onGetDevice(SendAnywhere.DeviceInfo deviceInfo);
+    }
+...
+}
+```
+### void onGetDevice(SendAnywhere.DeviceInfo deviceInfo)
+Called when the specified device information is obtained.
+
+## Interface SendAnywhere.DeviceInfo
+This interface is provides information about the device.
+See example code([DeviceListActivity.java](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/DeviceListActivity.java), [HistoryActivity.java](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/HistoryActivity.java)).
+```java
+public class SendAnywhere {
+...
+    public interface DeviceInfo {
+        String getId();
+        String getDeviceName();
+        String getProfileName();
+        Boolean isTrusted();
+    }
+...
+}
+```
+
+### String getId()
+Returns the ID of the device. This ID is used as a parameter of SendAnywhere.deleteDevice().
+
+### String getDeviceName()
+Returns the ID of the device.
+
+### String getProfileName()
+Returns the profile name specified by the user.
+
+### Boolean isTrusted()
+Returns true if this device is trusted. Files sent from trusted devices are automatically downloaded.
+
+## Interface SendAnywhere.ReceivedNotificationListener
+Used as a parameter of SendAnywhere.getReceivedNotifications().
+See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/ReceivedNotificationsActivity.java).
+```java
+public class SendAnywhere {
+...
+    public interface ReceivedNotificationListener {
+        void onGetReceivedNotifications(List<SendAnywhere.ReceivedNotification> notifications);
+    }
+...
+}
+```
+
+### void onGetReceivedNotifications(List<SendAnywhere.ReceivedNotification> notifications)
+Called when getting the list of file transfer notifications delivered to the current device.
+
+## Interface SendAnywhere.ReceivedNotification
+This interface provides data related to notifications delivered to the device.
+See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/ReceivedNotificationsActivity.java).
+```java
+public class SendAnywhere {
+...
+    public interface ReceivedNotification {
+        long getId();
+        int getFileCount();
+        long getSize();
+        long getSendAt();
+        long getExiireAt();
+        String getDeviceId();
+        String getDeviceName();
+        String getProfileName();
+    }
+...
+}
+```
+
+### long getId()
+Returns the ID of the notification. This ID is used as a parameter of SendAnywhere.deleteReceivedNotification().
+
+### int getFileCount()
+Returns the number of files to transfer.
+
+### long getSize()
+Returns the size of the files to be transferred.
+
+### long getSendAt()
+Returns the time at which the notification was delivered. (Milliseconds)
+
+### long getExiireAt()
+Returns the time at which the transmission expires.
+Transmission is not possible after this time. (Milliseconds)
+
+### String getDeviceId()
+Returns the ID of the device that transferred the file. This ID is used as a parameter of SendAnywhere.getDevice() or SendAnywhere.deleteDevice().
+
+### String getDeviceName()
+Returns the name of the device that sent the files.
+
+### String getProfileName()
+Returns the user-specified profile name on the device that sent the files.
