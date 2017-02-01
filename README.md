@@ -309,7 +309,7 @@ Called when a transfer history list is obtained. See [example code](https://gith
 
 ## Interface SendAnywhere.TransferHistory
 This interface provides data related to each transfer history.
-You need to call 'Settings.setRecordTransferHistory (true);' 'to get the full history. The history of items shared with 'Share link' can be obtained regardless of the Settings.setRecordTransferHistory () call.
+You need to call 'Settings.setRecordTransferHistory (true);' to get the full history. The history of items shared with 'Share link' can be obtained regardless of the Settings.setRecordTransferHistory () call.
 See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/HistoryActivity.java).
 ```java
 public class SendAnywhere {
