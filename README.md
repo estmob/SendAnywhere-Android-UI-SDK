@@ -10,7 +10,7 @@ https://send-anywhere.com/web/page/api
 Send Anywhere Android SDK is available via both `jcenter()` and `mavenCentral()`.
 Just add the following line to your gradle dependency:
 ```gradle
-compile ('com.estmob.android:sendanywhere-transfer:7.1.25@aar') {
+compile ('com.estmob.android:sendanywhere-transfer:7.2.20@aar') {
 	transitive = true
 }
 ```
@@ -224,6 +224,8 @@ public class SendAnywhere {
         void setTrustedDevicesOption(TrustedDevicesOption option);
         void setRecordTransferHistory(boolean record);
         void setDuplicateFileOption(DuplicateFileOption option);
+        void setNotificationSmallIcon(Integer iconRes);
+        void setNotificationLargeIcon(Bitmap bitmap);
 
         File getDownloadDir();
         String getProfileName();
@@ -232,6 +234,8 @@ public class SendAnywhere {
         TrustedDevicesOption getTrustedDevicesOption();
         boolean getRecordHistory();
         DuplicateFileOption getDuplicateFileOption();
+        Integer getNotificationSmallIcon();
+        Bitmap getNotificationLargeIcon();
     }
 ...
 }
@@ -292,6 +296,20 @@ SendAnywhere.DuplicateFileOption    |                       |
 ----------------------------------- | ----------------------|
 RENAME                              | Rename the file.      |
 OVERWRITE                           | Overwrite the file.   |
+
+### void setNotificationSmallIcon(Integer iconRes)
+Set the small icon resource, which will be used to represent the notification in the status bar. If set to null, the default icon is used.
+
+Parameters |                                                                    |
+---------- | -------------------------------------------------------------------|
+iconRes    | A resource ID in the application's package of the drawable to use. |
+
+### void setNotificationLargeIcon(Bitmap bitmap)
+Set the large icon in the notification. If set to null, the default icon is used.
+
+Parameters |                                                    |
+---------- | ---------------------------------------------------|
+bitmap     | A bitmap to be used as large icon in notification. |
 
 ## Interface SendAnywhere.HistoryListener
 Used as a parameter of SendAnywhere.getHistory().
