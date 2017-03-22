@@ -1,7 +1,9 @@
 package com.estmob.android.sendanywhere.sdk.ui.example;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,17 +19,25 @@ import com.estmob.sdk.transfer.SendAnywhere;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int RESULT_CODE_GET_CONTENT = 1024;
+    private static final int RESULT_CONTENTS_FOR_ACTIVITY = 1024;
+    private static final int RESULT_CONTENTS_FOR_DIALOG = 1025;
     private static final int CODE_PERMISSIONS = 100;
     private boolean permissionsGranted = false;
+    private DialogInterface transferDialog;
+    private DialogInterface.OnDismissListener onDismissListener = new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            removeTransferDialog();
+        }
+    };
 
     private View.OnClickListener onButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.buttonReceive) {
-                receive();
+                receive(false);
             } else if (v.getId() == R.id.buttonSend) {
-                send();
+                send(false);
             } else if (v.getId() == R.id.buttonActivity) {
                 showActivity();
             } else if (v.getId() == R.id.buttonTest) {
@@ -36,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
             } else if (v.getId() == R.id.buttonSettings) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
+            } else if (v.getId() == R.id.buttonSendDialog) {
+                send(true);
+            } else if (v.getId() == R.id.buttonRecvDialog) {
+                receive(true);
             }
         }
     };
@@ -72,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonActivity).setOnClickListener(onButtonClickListener);
         findViewById(R.id.buttonTest).setOnClickListener(onButtonClickListener);
         findViewById(R.id.buttonSettings).setOnClickListener(onButtonClickListener);
+        findViewById(R.id.buttonSendDialog).setOnClickListener(onButtonClickListener);
+        findViewById(R.id.buttonRecvDialog).setOnClickListener(onButtonClickListener);
 
         processIntent(getIntent());
         new SdkPreferences(this).load();
@@ -95,6 +111,19 @@ public class MainActivity extends AppCompatActivity {
         SendAnywhere.closeNearBy();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        removeTransferDialog();
+    }
+
+    private void removeTransferDialog() {
+        if (transferDialog != null) {
+            transferDialog.cancel();
+            transferDialog = null;
+        }
+    }
+
     private void processIntent(Intent intent) {
         if (intent == null) {
             return;
@@ -107,13 +136,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void showSendDialog(Uri[] uris) {
+        if (transferDialog == null) {
+            transferDialog = SendAnywhere.showSendDialog(this, uris, onDismissListener);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_CODE_GET_CONTENT && resultCode == RESULT_OK) {
+        if ((requestCode == RESULT_CONTENTS_FOR_ACTIVITY || requestCode == RESULT_CONTENTS_FOR_DIALOG) && resultCode == RESULT_OK) {
             final Uri uri = data.getData();
             if (uri != null) {
-                SendAnywhere.startSendActivity(this, new Uri[]{uri});
+                switch (requestCode) {
+                    case RESULT_CONTENTS_FOR_ACTIVITY:
+                        SendAnywhere.startSendActivity(this, new Uri[]{uri});
+                        break;
+                    case RESULT_CONTENTS_FOR_DIALOG:
+                        showSendDialog(new Uri[]{uri});
+                        break;
+                }
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     ClipData clipData = data.getClipData();
@@ -123,7 +165,14 @@ public class MainActivity extends AppCompatActivity {
                             ClipData.Item item = clipData.getItemAt(i);
                             uris[i] = item.getUri();
                         }
-                        SendAnywhere.startSendActivity(this, uris);
+                        switch (requestCode) {
+                            case RESULT_CONTENTS_FOR_ACTIVITY:
+                                SendAnywhere.startSendActivity(this, uris);
+                                break;
+                            case RESULT_CONTENTS_FOR_DIALOG:
+                                showSendDialog(uris);
+                                break;
+                        }
                     }
                 }
             }
@@ -151,14 +200,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void receive() {
+    private void receive(boolean showDialog) {
         if (!permissionsGranted) {
             return;
         }
-        SendAnywhere.startReceiveActivity(MainActivity.this);
+        if (showDialog) {
+            if (transferDialog == null) {
+                transferDialog = SendAnywhere.showReceiveDialog(this, onDismissListener);
+            }
+        } else {
+            SendAnywhere.startReceiveActivity(MainActivity.this);
+        }
     }
 
-    private void send() {
+    private void send(boolean showDialog) {
         if (!permissionsGranted) {
             return;
         }
@@ -166,9 +221,8 @@ public class MainActivity extends AppCompatActivity {
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        //intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*", "audio/*", "video/*"});
-        startActivityForResult(intent, RESULT_CODE_GET_CONTENT);
+        startActivityForResult(intent, showDialog ? RESULT_CONTENTS_FOR_DIALOG : RESULT_CONTENTS_FOR_ACTIVITY);
     }
 
     private void showActivity() {

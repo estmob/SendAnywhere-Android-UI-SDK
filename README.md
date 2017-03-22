@@ -62,6 +62,8 @@ public class SendAnywhere {
     public static void startReceiveActivity(Context context);
     public static void startReceiveActivity(Context context, String key);
     public static void showActivity(Context context);
+    public static DialogInterface showSendDialog(Context context, Uri[] uris, DialogInterface.OnDismissListener onDismissListener);
+    public static DialogInterface showReceiveDialog(Context context, DialogInterface.OnDismissListener onDismissListener);
     public static void publishNearBy();
     public static void closeNearBy();
     public static void getHistory(HistoryListener listener);
@@ -127,6 +129,23 @@ Show the send and receive progress and the result of the transfer operation.
 Parameters |                                      |
 -----------| -------------------------------------|
 context    | The current context.                 |
+
+### public static DialogInterface showSendDialog(Context context, Uri[] uris, DialogInterface.OnDismissListener onDismissListener)
+Show dialog for sending files. Returns the object of android.content.DialogInterface for the dialog shown.
+
+Parameters        |                                                  |
+------------------| -------------------------------------------------|
+context           | The current context.                             |
+uris              | The array of URIs of the files to transfer.      |
+onDismissListener | The Listener for receiving dialog dismiss event. |
+
+### public static DialogInterface showReceiveDialog(Context context, DialogInterface.OnDismissListener onDismissListener)
+Show dialog for receiving files. Returns the object of android.content.DialogInterface for the dialog shown.
+
+Parameters        |                                                  |
+------------------| -------------------------------------------------|
+context           | The current context.                             |
+onDismissListener | The Listener for receiving dialog dismiss event. |
 
 ### public static void publishNearBy()
 Make sure the app currently appears in the apps that use this SDK and the Send Anywhere application on nearby devices. Users can more easily transfer files between their devices.
@@ -226,6 +245,7 @@ public class SendAnywhere {
         void setDuplicateFileOption(DuplicateFileOption option);
         void setNotificationSmallIcon(Integer iconRes);
         void setNotificationLargeIcon(Bitmap bitmap);
+        void setFilePattern(Pattern pattern);
 
         File getDownloadDir();
         String getProfileName();
@@ -236,6 +256,7 @@ public class SendAnywhere {
         DuplicateFileOption getDuplicateFileOption();
         Integer getNotificationSmallIcon();
         Bitmap getNotificationLargeIcon();
+        Pattern getFilePattern();
     }
 ...
 }
@@ -310,6 +331,23 @@ Set the large icon in the notification. If set to null, the default icon is used
 Parameters |                                                    |
 ---------- | ---------------------------------------------------|
 bitmap     | A bitmap to be used as large icon in notification. |
+
+### void setFilePattern(Pattern pattern)
+Set a pattern to filter downloaded files.
+
+Parameters |                                                               |
+---------- | --------------------------------------------------------------|
+pattern    | The java.util.regex.Pattern object used for file filtering.   |
+
+```java
+// ex) Set to download only jpg, png files.
+    void setFilePattern() {
+        SendAnywhere.Settings settings = SendAnywhere.getSettings(context);
+        final String FILE_PATTERN = "(.+(\\.(?i)(jpg|png))$)";
+        settings.setFilePattern(Pattern.compile(FILE_PATTERN));
+    }
+
+```
 
 ## Interface SendAnywhere.HistoryListener
 Used as a parameter of SendAnywhere.getHistory().
@@ -479,7 +517,7 @@ public class SendAnywhere {
         int getFileCount();
         long getSize();
         long getSendAt();
-        long getExiireAt();
+        long getExireAt();
         String getDeviceId();
         String getDeviceName();
         String getProfileName();
@@ -500,7 +538,7 @@ Returns the size of the files to be transferred.
 ### long getSendAt()
 Returns the time at which the notification was delivered. (Milliseconds)
 
-### long getExiireAt()
+### long getExireAt()
 Returns the time at which the transmission expires.
 Transmission is not possible after this time. (Milliseconds)
 

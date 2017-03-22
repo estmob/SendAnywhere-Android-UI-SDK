@@ -2,6 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.estmob.android.sendanywhere.sdk.ui.example">
 
+    <!--
+     [GCM]
+     Creates a custom permission so only this app can receive its messages.
+
+     NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
+           where PACKAGE is the application's provider name.
+    -->
+    <permission
+    android:name="${applicationId}.permission.C2D_MESSAGE"
+    android:protectionLevel="signature"/>
+
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

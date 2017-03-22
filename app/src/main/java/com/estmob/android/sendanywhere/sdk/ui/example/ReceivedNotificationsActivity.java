@@ -130,7 +130,7 @@ public class ReceivedNotificationsActivity extends AppCompatActivity {
             textFileCount.setText(String.format("%d files", notification.getFileCount()));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
             textSentAt.setText(dateFormat.format(notification.getSendAt()));
-            textExpireAt.setText(String.format("Expire At %s", dateFormat.format(notification.getExiireAt())));
+            textExpireAt.setText(String.format("Expire At %s", dateFormat.format(notification.getExireAt())));
         }
     }
 }

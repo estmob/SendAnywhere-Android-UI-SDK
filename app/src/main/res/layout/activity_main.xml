@@ -15,14 +15,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send"
+        android:text="Send (Activity)"
         android:id="@+id/buttonSend"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Receive"
+        android:text="Receive (Activity)"
         android:id="@+id/buttonReceive"/>
 
     <Button
@@ -31,6 +31,20 @@
         android:layout_marginTop="10dp"
         android:text="Activity"
         android:id="@+id/buttonActivity"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Send (Dialog)"
+        android:id="@+id/buttonSendDialog"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Receive (Dialog)"
+        android:id="@+id/buttonRecvDialog"/>
 
     <Button
         android:layout_width="match_parent"
