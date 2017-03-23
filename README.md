@@ -297,7 +297,6 @@ You should also add the following to AndroidManifest.xml:
             android:name="${applicationId}.permission.C2D_MESSAGE"
             android:protectionLevel="signature"/>
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 </manifest>
 ```
 
