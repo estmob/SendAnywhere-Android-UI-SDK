@@ -33,11 +33,21 @@ You must call `SendAnywhere.init(context, "YOUR_API_KEY")` proceeding any transf
 If this problem persists, please contact us to re-issue your api-key.
 
 ### Conflict with `google-play-services`
-Send Anywhere SDK uses `play-services-analytics:10.0.1` internally.
+Send Anywhere SDK uses `com.google.android.gms:play-services-analytics` internally.
 If this conflicts with your `play-services` dependency, please exclude `play-services` module used in our SDK:
 ```gradle
 compile ('com.estmob.android:sendanywhere-transfer:x.x.x@aar') {
     exclude module: "play-services-analytics"
+    transitive = true
+}
+```
+
+### Conflict with `httpcore`
+Send Anywhere SDK uses `org.apache.httpcomponents:httpcore` internally.
+If this conflicts with your `httpcore` dependency, please exclude `httpcore` module used in our SDK:
+```gradle
+compile ('com.estmob.android:sendanywhere-transfer:x.x.x@aar') {
+    exclude module: "httpcore"
     transitive = true
 }
 ```
@@ -280,6 +290,16 @@ dir        | The profile name      |
 Set the GCM / FCM token to receive file transfer notifications delivered directly to the device. If set to null, no notifications will be dispatched. The default value is null.
 See [example code](https://github.com/estmob/SendAnywhere-Android-UI-SDK/blob/master/app/src/main/java/com/estmob/android/sendanywhere/sdk/ui/example/MyFirebaseInstanceIDService.java).
 **In order for your app to receive notifications, you need to register your GCM / FCM server key. Request registration of your server key by email(api@estmob.com).**
+You should also add the following to AndroidManifest.xml:
+```xml
+<manifest ....>
+    <permission
+            android:name="${applicationId}.permission.C2D_MESSAGE"
+            android:protectionLevel="signature"/>
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+</manifest>
+```
 
 Parameters |                       |
 ---------- | ----------------------|
