@@ -10,7 +10,7 @@ https://send-anywhere.com/web/page/api
 Send Anywhere Android SDK is available via both `jcenter()` and `mavenCentral()`.
 Just add the following line to your gradle dependency:
 ```gradle
-compile ('com.estmob.android:sendanywhere-transfer:7.3.25@aar') {
+compile ('com.estmob.android:sendanywhere-transfer:7.4.5@aar') {
 	transitive = true
 }
 ```
@@ -73,7 +73,9 @@ public class SendAnywhere {
     public static void startReceiveActivity(Context context, String key);
     public static void showActivity(Context context);
     public static DialogInterface showSendDialog(Context context, Uri[] uris, DialogInterface.OnDismissListener onDismissListener);
+    public static DialogInterface showSendDialog(Context context, Uri[] uris, DialogInterface.OnDismissListener onDismissListener, ResultCallback resultCallback);
     public static DialogInterface showReceiveDialog(Context context, DialogInterface.OnDismissListener onDismissListener);
+    public static DialogInterface showReceiveDialog(Context context, DialogInterface.OnDismissListener onDismissListener, ResultCallback resultCallback);
     public static void publishNearBy();
     public static void closeNearBy();
     public static void getHistory(HistoryListener listener);
@@ -140,22 +142,28 @@ Parameters |                                      |
 -----------| -------------------------------------|
 context    | The current context.                 |
 
-### public static DialogInterface showSendDialog(Context context, Uri[] uris, DialogInterface.OnDismissListener onDismissListener)
+### public static DialogInterface showSendDialog(Context context, Uri[] uris, DialogInterface.OnDismissListener onDismissListener, ResultCallback resultCallback)
 Show dialog for sending files. Returns the object of android.content.DialogInterface for the dialog shown.
 
-Parameters        |                                                  |
-------------------| -------------------------------------------------|
-context           | The current context.                             |
-uris              | The array of URIs of the files to transfer.      |
-onDismissListener | The Listener for receiving dialog dismiss event. |
+Parameters        |                                                     |
+------------------| ----------------------------------------------------|
+context           | The current context.                                |
+uris              | The array of URIs of the files to transfer.         |
+onDismissListener | The listener for receiving dialog dismiss event.    |
+resultCallback    | The callback that receives the transmission result. |
 
-### public static DialogInterface showReceiveDialog(Context context, DialogInterface.OnDismissListener onDismissListener)
+onDismissListener and resultCallback can be set to null if not used.
+
+### public static DialogInterface showReceiveDialog(Context context, DialogInterface.OnDismissListener onDismissListener, ResultCallback resultCallback)
 Show dialog for receiving files. Returns the object of android.content.DialogInterface for the dialog shown.
 
-Parameters        |                                                  |
-------------------| -------------------------------------------------|
-context           | The current context.                             |
-onDismissListener | The Listener for receiving dialog dismiss event. |
+Parameters        |                                                     |
+------------------| ----------------------------------------------------|
+context           | The current context.                                |
+onDismissListener | The listener for receiving dialog dismiss event.    |
+resultCallback    | The callback that receives the transmission result. |
+
+onDismissListener and resultCallback can be set to null if not used.
 
 ### public static void publishNearBy()
 Make sure the app currently appears in the apps that use this SDK and the Send Anywhere application on nearby devices. Users can more easily transfer files between their devices.
@@ -569,3 +577,53 @@ Returns the name of the device that sent the files.
 
 ### String getProfileName()
 Returns the user-specified profile name on the device that sent the files.
+
+## Interface SendAnywhere.ResultCallback
+This interface is used to receive the transmission results.
+```java
+public class SendAnywhere {
+...
+    public interface ResultCallback {
+        void onResult(SendAnywhere.TransferResult result);
+    }
+...
+}
+```
+
+### void onResult(SendAnywhere.TransferResult result)
+Called when the transfer is finished.
+
+Parameters |                                                    |
+---------- | ---------------------------------------------------|
+result     | Information about the result of the transmission.  |
+
+## Interface SendAnywhere.ResultCallback
+This interface provides information about the transmission result.
+```java
+public class SendAnywhere {
+...
+    public interface TransferResult {
+        SendAnywhere.TransferType getType();
+        SendAnywhere.TransferState getState();
+    }
+...
+}
+```
+
+### SendAnywhere.TransferType getType()
+Get the transfer type.
+
+SendAnywhere.TransferType   |                       |
+--------------------------- | ----------------------|
+SEND                        | Sent                  |
+RECEIVE                     | Received              |
+SHARE                       | Shared via URL link   |
+
+### SendAnywhere.TransferState getState()
+Get the result of the transmission.
+
+SendAnywhere.TransferState  |                       |
+--------------------------- | ----------------------|
+SUCCEEDED                   | Succeeded             |
+CANCELLED                   | Cancelled by user     |
+FAILED                      | Failed                |

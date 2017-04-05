@@ -1,7 +1,6 @@
 package com.estmob.android.sendanywhere.sdk.ui.example;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.estmob.sdk.transfer.SendAnywhere;
@@ -138,7 +138,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void showSendDialog(Uri[] uris) {
         if (transferDialog == null) {
-            transferDialog = SendAnywhere.showSendDialog(this, uris, onDismissListener);
+            transferDialog = SendAnywhere.showSendDialog(this, uris, onDismissListener, new SendAnywhere.ResultCallback() {
+                @Override
+                public void onResult(SendAnywhere.TransferResult result) {
+                    Log.d("TransferResult", String.format("%s %s", result.getType().toString(), result.getState().toString()));
+                }
+            });
         }
     }
 
@@ -206,7 +211,12 @@ public class MainActivity extends AppCompatActivity {
         }
         if (showDialog) {
             if (transferDialog == null) {
-                transferDialog = SendAnywhere.showReceiveDialog(this, onDismissListener);
+                transferDialog = SendAnywhere.showReceiveDialog(this, onDismissListener, new SendAnywhere.ResultCallback() {
+                    @Override
+                    public void onResult(SendAnywhere.TransferResult result) {
+                        Log.d("TransferResult", String.format("%s %s", result.getType().toString(), result.getState().toString()));
+                    }
+                });
             }
         } else {
             SendAnywhere.startReceiveActivity(MainActivity.this);
