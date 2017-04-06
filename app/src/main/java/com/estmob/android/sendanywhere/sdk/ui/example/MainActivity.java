@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonRecvDialog).setOnClickListener(onButtonClickListener);
 
         processIntent(getIntent());
-        new SdkPreferences(this).load();
     }
 
     @Override

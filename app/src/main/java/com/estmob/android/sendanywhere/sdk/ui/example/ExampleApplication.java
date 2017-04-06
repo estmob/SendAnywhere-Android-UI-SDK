@@ -21,12 +21,14 @@ public class ExampleApplication extends Application {
     public void onCreate() {
         super.onCreate();
         SendAnywhere.init(this, API_KEY);
+        new SdkPreferences(this).load();
+
         SendAnywhere.Settings settings = SendAnywhere.getSettings(this);
         settings.setDownloadDir(new File(Environment.getExternalStorageDirectory(), "SendAnywhere"));
         settings.setDeviceToken(FirebaseInstanceId.getInstance().getToken());
 
-        //final String FILE_PATTERN = "(.+(\\.(?i)(jpg|png|gif))$)";
-        //settings.setFilePattern(Pattern.compile(FILE_PATTERN));
+//        final String FILE_PATTERN = "(.+(\\.(?i)(jpg|png|gif))$)";
+//        settings.setFilePattern(Pattern.compile(FILE_PATTERN));
     }
 
     @Override
