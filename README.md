@@ -446,6 +446,7 @@ SendAnywhere.TransferState  |                       |
 SUCCEEDED                   | Succeeded             |
 CANCELLED                   | Cancelled by user     |
 FAILED                      | Failed                |
+SKIPPED                     | No file transferred.  |
 
 ### long getSize()
 Get all transferred file sizes.
@@ -627,3 +628,4 @@ SendAnywhere.TransferState  |                       |
 SUCCEEDED                   | Succeeded             |
 CANCELLED                   | Cancelled by user     |
 FAILED                      | Failed                |
+SKIPPED                     | No file transferred.  |
