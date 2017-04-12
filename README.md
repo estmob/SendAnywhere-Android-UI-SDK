@@ -264,6 +264,7 @@ public class SendAnywhere {
         void setNotificationSmallIcon(Integer iconRes);
         void setNotificationLargeIcon(Bitmap bitmap);
         void setFilePattern(Pattern pattern);
+        void setTransferTimeout(long timeout);
 
         File getDownloadDir();
         String getProfileName();
@@ -275,6 +276,7 @@ public class SendAnywhere {
         Integer getNotificationSmallIcon();
         Bitmap getNotificationLargeIcon();
         Pattern getFilePattern();
+        long getTransferTimeout();
     }
 ...
 }
@@ -375,6 +377,9 @@ pattern    | The java.util.regex.Pattern object used for file filtering.   |
     }
 
 ```
+
+### void setTransferTimeout(long timeout)
+Set the timeout to wait when there is no response from the other party during transmission. (Milliseconds)
 
 ## Interface SendAnywhere.HistoryListener
 Used as a parameter of SendAnywhere.getHistory().
@@ -606,6 +611,9 @@ public class SendAnywhere {
     public interface TransferResult {
         SendAnywhere.TransferType getType();
         SendAnywhere.TransferState getState();
+        int getTotalFileCount();
+        int getFileCount();
+        int getTransferredFileCount();
     }
 ...
 }
@@ -629,3 +637,12 @@ SUCCEEDED                   | Succeeded             |
 CANCELLED                   | Cancelled by user     |
 FAILED                      | Failed                |
 SKIPPED                     | No file transferred.  |
+
+### int getTotalFileCount()
+Returns the total number of files sent by the sender.
+
+### int getFileCount()
+Returns the number of files the receiver attempted to download. It is determined by the file pattern set by the receiver.
+
+### int getTransferredFileCount()
+Returns the number of files that have been transferred.
