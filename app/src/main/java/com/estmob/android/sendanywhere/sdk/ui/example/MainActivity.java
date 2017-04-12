@@ -66,9 +66,6 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-            }
             if (permissions.isEmpty()) {
                 permissionsGranted = true;
             } else {
@@ -230,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*", "audio/*", "video/*"});
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*", "audio/*", "video/*", "application/*"});
         startActivityForResult(intent, showDialog ? RESULT_CONTENTS_FOR_DIALOG : RESULT_CONTENTS_FOR_ACTIVITY);
     }
 

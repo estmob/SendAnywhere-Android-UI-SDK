@@ -26,6 +26,7 @@ public class ExampleApplication extends Application {
         SendAnywhere.Settings settings = SendAnywhere.getSettings(this);
         settings.setDownloadDir(new File(Environment.getExternalStorageDirectory(), "SendAnywhere"));
         settings.setDeviceToken(FirebaseInstanceId.getInstance().getToken());
+//        settings.setTransferTimeout(30000);
 
 //        final String FILE_PATTERN = "(.+(\\.(?i)(jpg|png|gif))$)";
 //        settings.setFilePattern(Pattern.compile(FILE_PATTERN));
