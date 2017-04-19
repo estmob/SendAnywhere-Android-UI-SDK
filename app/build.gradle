@@ -29,7 +29,7 @@ dependencies {
 //    compile 'com.android.support:design:25.3.1'
 //    compile project(':transfer')
 
-    compile ('com.estmob.android:sendanywhere-transfer:7.4.12@aar') { transitive = true }
+    compile ('com.estmob.android:sendanywhere-transfer:7.4.19@aar') { transitive = true }
 
     compile 'com.google.firebase:firebase-core:10.2.1'
 }
