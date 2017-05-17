@@ -603,7 +603,7 @@ Parameters |                                                    |
 ---------- | ---------------------------------------------------|
 result     | Information about the result of the transmission.  |
 
-## Interface SendAnywhere.ResultCallback
+## Interface SendAnywhere.TransferResult
 This interface provides information about the transmission result.
 ```java
 public class SendAnywhere {
