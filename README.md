@@ -10,7 +10,7 @@ https://send-anywhere.com/web/page/api
 Send Anywhere Android SDK is available via both `jcenter()` and `mavenCentral()`.
 Just add the following line to your gradle dependency:
 ```gradle
-compile ('com.estmob.android:sendanywhere-transfer:7.7.6@aar') {
+compile ('com.estmob.android:sendanywhere-transfer:7.7.19@aar') {
 	transitive = true
 }
 ```
@@ -27,7 +27,7 @@ android.permission.READ_EXTERNAL_STORAGE`) to work properly, but **does NOT** ha
 * Requesting Permissions at Run Time (Android Developers) -  https://developer.android.com/training/permissions/requesting.html
 * Exploring the new Android Permissions Model (Ribot labs) - https://labs.ribot.co.uk/exploring-the-new-android-permissions-model-ba1d5d6c0610#.95cppknud
 
-### API key error: `ERROR_WRONG_API_KEY`
+### API key error: `Wrong API key`
 You must call `SendAnywhere.init(context, "YOUR_API_KEY")` proceeding any transfer operations, e.g. `onCreate` of `Activity`. It is declared as `static`, so you just have to call it once.
 
 If this problem persists, please contact us to re-issue your api-key.

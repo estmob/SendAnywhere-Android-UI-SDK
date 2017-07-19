@@ -15,12 +15,10 @@ import java.util.regex.Pattern;
 
 public class ExampleApplication extends Application {
 
-    private static final String API_KEY = "d225967173e9d95550b8f2fca8e659bc5c0fbddc";
-
     @Override
     public void onCreate() {
         super.onCreate();
-        SendAnywhere.init(this, API_KEY);
+        SendAnywhere.init(this, "YOUR_API_KEY");
         new SdkPreferences(this).load();
 
         SendAnywhere.Settings settings = SendAnywhere.getSettings(this);
