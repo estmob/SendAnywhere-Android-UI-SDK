@@ -30,8 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -71,7 +70,7 @@
             android:label="Settings"/>
 
         <activity android:name=".TestActivity"
-            android:label="Settings"/>
+            android:label="Test"/>
 
         <activity android:name=".DeviceListActivity"
             android:label="Devices"

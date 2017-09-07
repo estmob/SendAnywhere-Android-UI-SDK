@@ -29,9 +29,9 @@ dependencies {
 //    compile 'com.android.support:design:25.3.1'
 //    compile project(':transfer')
 
-    compile ('com.estmob.android:sendanywhere-transfer:7.7.19@aar') { transitive = true }
+    compile ('com.estmob.android:sendanywhere-transfer:7.9.7@aar') { transitive = true }
 
-    compile 'com.google.firebase:firebase-core:10.2.1'
+    compile 'com.google.firebase:firebase-core:11.0.4'
 }
 
 apply plugin: 'com.google.gms.google-services'

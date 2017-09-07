@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private static final int RESULT_CONTENTS_FOR_ACTIVITY = 1024;
     private static final int RESULT_CONTENTS_FOR_DIALOG = 1025;
+    private static final int RESULT_CONTENTS_FOR_INTENT = 1026;
     private static final int CODE_PERMISSIONS = 100;
     private boolean permissionsGranted = false;
     private DialogInterface transferDialog;
@@ -35,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.buttonReceive) {
-                receive(false);
+                receive(Mode.ACTIVITY);
             } else if (v.getId() == R.id.buttonSend) {
-                send(false);
+                send(Mode.ACTIVITY);
             } else if (v.getId() == R.id.buttonActivity) {
                 showActivity();
             } else if (v.getId() == R.id.buttonTest) {
@@ -47,9 +48,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
             } else if (v.getId() == R.id.buttonSendDialog) {
-                send(true);
+                send(Mode.DIALOG);
             } else if (v.getId() == R.id.buttonRecvDialog) {
-                receive(true);
+                receive(Mode.DIALOG);
+            } else if (v.getId() == R.id.buttonSendIntent) {
+                send(Mode.INTENT);
+            } else if (v.getId() == R.id.buttonRecvIntent) {
+                receive(Mode.INTENT);
             }
         }
     };
@@ -85,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonSettings).setOnClickListener(onButtonClickListener);
         findViewById(R.id.buttonSendDialog).setOnClickListener(onButtonClickListener);
         findViewById(R.id.buttonRecvDialog).setOnClickListener(onButtonClickListener);
+        findViewById(R.id.buttonSendIntent).setOnClickListener(onButtonClickListener);
+        findViewById(R.id.buttonRecvIntent).setOnClickListener(onButtonClickListener);
 
         processIntent(getIntent());
     }
@@ -146,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == RESULT_CONTENTS_FOR_ACTIVITY || requestCode == RESULT_CONTENTS_FOR_DIALOG) && resultCode == RESULT_OK) {
+        if ((requestCode == RESULT_CONTENTS_FOR_ACTIVITY || requestCode == RESULT_CONTENTS_FOR_DIALOG || requestCode == RESULT_CONTENTS_FOR_INTENT)
+                && resultCode == RESULT_OK) {
             final Uri uri = data.getData();
             if (uri != null) {
                 switch (requestCode) {
@@ -155,6 +163,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case RESULT_CONTENTS_FOR_DIALOG:
                         showSendDialog(new Uri[]{uri});
+                        break;
+                    case RESULT_CONTENTS_FOR_INTENT:
+                        startSendActivity(new Uri[]{uri});
                         break;
                 }
             } else {
@@ -172,6 +183,9 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case RESULT_CONTENTS_FOR_DIALOG:
                                 showSendDialog(uris);
+                                break;
+                            case RESULT_CONTENTS_FOR_INTENT:
+                                startSendActivity(uris);
                                 break;
                         }
                     }
@@ -201,34 +215,62 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void receive(boolean showDialog) {
+    private void receive(Mode mode) {
         if (!permissionsGranted) {
             return;
         }
-        if (showDialog) {
-            if (transferDialog == null) {
-                transferDialog = SendAnywhere.showReceiveDialog(this, onDismissListener, new SendAnywhere.ResultCallback() {
-                    @Override
-                    public void onResult(SendAnywhere.TransferResult result) {
-                        Log.d("TransferResult", String.format("%s %s", result.getType().toString(), result.getState().toString()));
-                    }
-                });
+        switch (mode) {
+            case ACTIVITY:
+                SendAnywhere.startReceiveActivity(MainActivity.this);
+                break;
+            case DIALOG:
+                if (transferDialog == null) {
+                    transferDialog = SendAnywhere.showReceiveDialog(this, onDismissListener, new SendAnywhere.ResultCallback() {
+                        @Override
+                        public void onResult(SendAnywhere.TransferResult result) {
+                            Log.d("TransferResult", String.format("%s %s", result.getType().toString(), result.getState().toString()));
+                        }
+                    });
+                }
+                break;
+            case INTENT:
+            {
+                Intent intent = new SendAnywhere.ReceiveIntentBuilder(this)
+                        .setInformationTitle(R.string.example_info_title)
+                        .setInformationText(R.string.example_info_text)
+                        .build();
+                startActivity(intent);
             }
-        } else {
-            SendAnywhere.startReceiveActivity(MainActivity.this);
+                break;
+            default:
+                break;
         }
     }
 
-    private void send(boolean showDialog) {
+    private void send(Mode mode) {
         if (!permissionsGranted) {
             return;
         }
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);;
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*", "audio/*", "video/*", "application/*"});
-        startActivityForResult(intent, showDialog ? RESULT_CONTENTS_FOR_DIALOG : RESULT_CONTENTS_FOR_ACTIVITY);
+        int reqCode = 0;
+        switch (mode) {
+            case ACTIVITY:
+                reqCode = RESULT_CONTENTS_FOR_ACTIVITY;
+                break;
+            case DIALOG:
+                reqCode = RESULT_CONTENTS_FOR_DIALOG;
+                break;
+            case INTENT:
+                reqCode = RESULT_CONTENTS_FOR_INTENT;
+                break;
+            default:
+                break;
+        }
+        startActivityForResult(intent, reqCode);
     }
 
     private void showActivity() {
@@ -236,5 +278,21 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         SendAnywhere.showActivity(this);
+    }
+
+    private void startSendActivity(Uri[] uris) {
+        Intent intent = new SendAnywhere.SendIntentBuilder(this, uris)
+                .setFeatureName(R.string.app_name)
+                .setFeatureUri(Uri.parse("https://send-anywhere.com"))
+                .setInformationTitle(R.string.example_info_title)
+                .setInformationText(R.string.example_info_text)
+                .build();
+        startActivity(intent);
+    }
+
+    enum Mode {
+        ACTIVITY,
+        DIALOG,
+        INTENT
     }
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Send Anywhere SDK Example</string>
+    <string name="example_info_title">Information</string>
+    <string name="example_info_text">The simplest way to Send files Anywhere</string>
 </resources>
