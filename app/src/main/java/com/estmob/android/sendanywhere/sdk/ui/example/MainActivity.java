@@ -236,8 +236,8 @@ public class MainActivity extends AppCompatActivity {
             case INTENT:
             {
                 Intent intent = new SendAnywhere.ReceiveIntentBuilder(this)
-                        .setInformationTitle(R.string.example_info_title)
-                        .setInformationText(R.string.example_info_text)
+                        .setInformationTitle(R.string.example_info_title) // title of the information dialog
+                        .setInformationText(R.string.example_info_text) // contents of the information dialog
                         .build();
                 startActivity(intent);
             }
@@ -282,10 +282,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void startSendActivity(Uri[] uris) {
         Intent intent = new SendAnywhere.SendIntentBuilder(this, uris)
-                .setFeatureName(R.string.app_name)
-                .setFeatureUri(Uri.parse("https://send-anywhere.com"))
-                .setInformationTitle(R.string.example_info_title)
-                .setInformationText(R.string.example_info_text)
+                .setFeatureName(R.string.app_name) // feature name to be displayed in send activity
+                .setFeatureUri(Uri.parse("https://send-anywhere.com")) // URI to open when you click feature name
+                .setInformationTitle(R.string.example_info_title) // title of the information dialog
+                .setInformationText(R.string.example_info_text) // contents of the information dialog
                 .build();
         startActivity(intent);
     }
