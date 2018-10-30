@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "27.0.3"
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.estmob.android.sendanywhere.sdk.ui.example"
@@ -20,11 +20,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
 
-    compile ('com.estmob.android:sendanywhere-transfer:8.7.23@aar') { transitive = true }
-    compile 'com.google.firebase:firebase-core:16.0.1'
+    implementation ('com.estmob.android:sendanywhere-transfer:8.7.23@aar') { transitive = true }
+    implementation 'com.google.firebase:firebase-core:16.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
