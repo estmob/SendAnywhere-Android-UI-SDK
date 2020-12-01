@@ -8,9 +8,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -22,13 +22,21 @@ public class MainActivity extends AppCompatActivity {
     private static final int RESULT_CONTENTS_FOR_ACTIVITY = 1024;
     private static final int RESULT_CONTENTS_FOR_DIALOG = 1025;
     private static final int RESULT_CONTENTS_FOR_INTENT = 1026;
+
     private static final int CODE_PERMISSIONS = 100;
+
     private boolean permissionsGranted = false;
     private DialogInterface transferDialog;
     private DialogInterface.OnDismissListener onDismissListener = new DialogInterface.OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialog) {
             removeTransferDialog();
+        }
+    };
+    private SendAnywhere.ResultCallback resultCallback = new SendAnywhere.ResultCallback() {
+        @Override
+        public void onResult(SendAnywhere.TransferResult result) {
+            Log.d("TransferResult", String.format("%s %s", result.getType().toString(), result.getState().toString()));
         }
     };
 
@@ -141,12 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showSendDialog(Uri[] uris) {
         if (transferDialog == null) {
-            transferDialog = SendAnywhere.showSendDialog(this, uris, onDismissListener, new SendAnywhere.ResultCallback() {
-                @Override
-                public void onResult(SendAnywhere.TransferResult result) {
-                    Log.d("TransferResult", String.format("%s %s", result.getType().toString(), result.getState().toString()));
-                }
-            });
+            transferDialog = SendAnywhere.showSendDialog(this, uris, onDismissListener, resultCallback);
         }
     }
 
@@ -169,25 +172,23 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    ClipData clipData = data.getClipData();
-                    if (clipData != null) {
-                        Uri[] uris = new Uri[clipData.getItemCount()];
-                        for (int i = 0; i < clipData.getItemCount(); ++i) {
-                            ClipData.Item item = clipData.getItemAt(i);
-                            uris[i] = item.getUri();
-                        }
-                        switch (requestCode) {
-                            case RESULT_CONTENTS_FOR_ACTIVITY:
-                                SendAnywhere.startSendActivity(this, uris);
-                                break;
-                            case RESULT_CONTENTS_FOR_DIALOG:
-                                showSendDialog(uris);
-                                break;
-                            case RESULT_CONTENTS_FOR_INTENT:
-                                startSendActivity(uris);
-                                break;
-                        }
+                ClipData clipData = data.getClipData();
+                if (clipData != null) {
+                    Uri[] uris = new Uri[clipData.getItemCount()];
+                    for (int i = 0; i < clipData.getItemCount(); ++i) {
+                        ClipData.Item item = clipData.getItemAt(i);
+                        uris[i] = item.getUri();
+                    }
+                    switch (requestCode) {
+                        case RESULT_CONTENTS_FOR_ACTIVITY:
+                            SendAnywhere.startSendActivity(this, uris);
+                            break;
+                        case RESULT_CONTENTS_FOR_DIALOG:
+                            showSendDialog(uris);
+                            break;
+                        case RESULT_CONTENTS_FOR_INTENT:
+                            startSendActivity(uris);
+                            break;
                     }
                 }
             }
@@ -225,19 +226,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case DIALOG:
                 if (transferDialog == null) {
-                    transferDialog = SendAnywhere.showReceiveDialog(this, onDismissListener, new SendAnywhere.ResultCallback() {
-                        @Override
-                        public void onResult(SendAnywhere.TransferResult result) {
-                            Log.d("TransferResult", String.format("%s %s", result.getType().toString(), result.getState().toString()));
-                        }
-                    });
+                    transferDialog = SendAnywhere.showReceiveDialog(this, onDismissListener, resultCallback);
                 }
                 break;
             case INTENT:
             {
                 Intent intent = new SendAnywhere.ReceiveIntentBuilder(this)
-                        .setInformationTitle(R.string.example_info_title) // title of the information dialog
-                        .setInformationText(R.string.example_info_text) // contents of the information dialog
+                        .setInformationTitle(R.string.example_info_title)
+                        .setInformationText(R.string.example_info_text)
                         .build();
                 startActivity(intent);
             }
@@ -282,10 +278,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void startSendActivity(Uri[] uris) {
         Intent intent = new SendAnywhere.SendIntentBuilder(this, uris)
-                .setFeatureName(R.string.app_name) // feature name to be displayed in send activity
-                .setFeatureUri(Uri.parse("https://send-anywhere.com")) // URI to open when you click feature name
-                .setInformationTitle(R.string.example_info_title) // title of the information dialog
-                .setInformationText(R.string.example_info_text) // contents of the information dialog
+                .setFeatureName(R.string.app_name)
+                .setFeatureUri(Uri.parse("https://send-anywhere.com"))
+                .setInformationTitle(R.string.example_info_title)
+                .setInformationText(R.string.example_info_text)
                 .build();
         startActivity(intent);
     }

@@ -1,19 +1,23 @@
 package com.estmob.android.sendanywhere.sdk.ui.example;
 
-import android.app.Application;
 import android.os.Environment;
+import androidx.annotation.NonNull;
+import androidx.multidex.MultiDexApplication;
 
 import com.estmob.sdk.transfer.SendAnywhere;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
-import java.util.regex.Pattern;
+//import java.util.regex.Pattern;
 
 /**
  * Created by francisco on 2016-12-14.
  */
 
-public class ExampleApplication extends Application {
+public class ExampleApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {
@@ -21,11 +25,18 @@ public class ExampleApplication extends Application {
         SendAnywhere.init(this, "YOUR_API_KEY");
         new SdkPreferences(this).load();
 
-        SendAnywhere.Settings settings = SendAnywhere.getSettings(this);
+        final SendAnywhere.Settings settings = SendAnywhere.getSettings(this);
         settings.setDownloadDir(new File(Environment.getExternalStorageDirectory(), "SendAnywhere"));
-        settings.setDeviceToken(FirebaseInstanceId.getInstance().getToken());
-//        settings.setTransferTimeout(30000);
-
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    settings.setDeviceToken(task.getResult().getToken());
+                } else {
+                    settings.setDeviceToken(null);
+                }
+            }
+        });
 //        final String FILE_PATTERN = "(.+(\\.(?i)(jpg|png|gif))$)";
 //        settings.setFilePattern(Pattern.compile(FILE_PATTERN));
     }
