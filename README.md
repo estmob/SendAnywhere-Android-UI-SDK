@@ -10,7 +10,7 @@ https://send-anywhere.com/web/page/api
 Send Anywhere Android SDK is available via both `jcenter()` and `mavenCentral()`.
 Just add the following line to your gradle dependency:
 ```gradle
-compile ('com.estmob.android:sendanywhere-transfer:10.12.1@aar') {
+compile ('com.estmob.android:sendanywhere-transfer:10.12.3@aar') {
 	transitive = true
 }
 ```
@@ -33,11 +33,11 @@ You must call `SendAnywhere.init(context, "YOUR_API_KEY")` proceeding any transf
 If this problem persists, please contact us to re-issue your api-key.
 
 ### Conflict with `google-play-services`
-Send Anywhere SDK uses `com.google.android.gms:play-services-analytics` internally.
+Send Anywhere SDK uses `com.google.android.gms:play-ads-identifier` internally.
 If this conflicts with your `play-services` dependency, please exclude `play-services` module used in our SDK:
 ```gradle
 compile ('com.estmob.android:sendanywhere-transfer:x.x.x@aar') {
-    exclude module: "play-services-analytics"
+    exclude module: "play-services-ads-identifier"
     transitive = true
 }
 ```

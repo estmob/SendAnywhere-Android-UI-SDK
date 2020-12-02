@@ -29,7 +29,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.firebase:firebase-messaging:21.0.0'
 
-    implementation ('com.estmob.android:sendanywhere-transfer:10.12.1@aar') { transitive = true }
+    implementation ('com.estmob.android:sendanywhere-transfer:10.12.3@aar') { transitive = true }
 }
 
 apply plugin: 'com.google.gms.google-services'
