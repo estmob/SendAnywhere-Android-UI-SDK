@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.3'
 
     defaultConfig {
         applicationId "com.estmob.android.sendanywhere.sdk.ui.example"
         minSdkVersion 17
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"
     }
@@ -21,10 +21,15 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
 
-    implementation ('com.estmob.android:sendanywhere-transfer:8.7.23@aar') { transitive = true }
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.firebase:firebase-messaging:21.0.0'
+
+    implementation ('com.estmob.android:sendanywhere-transfer:10.12.1@aar') { transitive = true }
 }
 
 apply plugin: 'com.google.gms.google-services'
